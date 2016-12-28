@@ -32,15 +32,15 @@ endif (MSVC OR MSVC90 OR MSVC10)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+find_package(PkgConfig)
+pkg_check_modules (ROS_COMPAT ros-compat)
+include_directories (ROS_COMPAT_INCLUDE_DIRS)
+
 find_package(TinyXML REQUIRED)
 include_directories(SYSTEM ${TinyXML_INCLUDE_DIRS})
 
 find_package(urdfdom_headers 0.4 REQUIRED)
 include_directories(SYSTEM ${urdfdom_headers_INCLUDE_DIRS})
-
-find_package(console_bridge 0.3 REQUIRED)
-include_directories(SYSTEM ${console_bridge_INCLUDE_DIRS})
-link_directories(${console_bridge_LIBRARY_DIRS})
 
 find_package(Boost REQUIRED system thread)
 include_directories(${Boost_INCLUDE_DIR})
@@ -69,7 +69,7 @@ endif()
 
 set(PKG_NAME ${PROJECT_NAME})
 set(PKG_LIBRARIES urdfdom_sensor urdfdom_model_state urdfdom_model urdfdom_world)
-set(PKG_DEPENDS urdfdom_headers console_bridge)
+set(PKG_DEPENDS urdfdom_headers)
 set(cmake_conf_file "cmake/urdfdom-config.cmake")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${cmake_conf_file}.in" "${CMAKE_BINARY_DIR}/${cmake_conf_file}" @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/${cmake_conf_file}
@@ -78,8 +78,8 @@ install(FILES ${CMAKE_BINARY_DIR}/${cmake_conf_file}
 # Make the package config file
 if (NOT MSVC)
   set(PKG_DESC "Unified Robot Description Format")
-  set(PKG_DEPENDS "urdfdom_headers console_bridge") # make the list separated by spaces instead of ;
-  set(PKG_URDF_LIBS "-lurdfdom_sensor -lurdfdom_model_state -lurdfdom_model -lurdfdom_world")
+  set(PKG_DEPENDS "urdfdom_headers") # make the list separated by spaces instead of ;
+  set(PKG_LIBS "-lurdfdom_sensor -lurdfdom_model_state -lurdfdom_model -lurdfdom_world")
   set(pkg_conf_file "cmake/pkgconfig/urdfdom.pc")
   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${pkg_conf_file}.in" "${CMAKE_BINARY_DIR}/${pkg_conf_file}" @ONLY)
   install(FILES ${CMAKE_BINARY_DIR}/${pkg_conf_file}

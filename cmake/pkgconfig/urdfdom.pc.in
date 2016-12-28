@@ -8,5 +8,5 @@ Name: @PKG_NAME@
 Description: @PKG_DESC@
 Version: @URDF_VERSION@
 Requires: @PKG_DEPENDS@
-Libs: -L${libdir} @PKG_URDF_LIBS@
+Libs: -L${libdir} @PKG_LIBS@
 Cflags: -I${includedir}
